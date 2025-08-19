@@ -1,11 +1,16 @@
 {
-    "is_code": true,
-    "line_count": 0,
-    "function_count": 0,
-    "variable_count": 0,
-    "complexity_score": 0,
-    "conditional_statements_count": 0,
-    "suggestions_list": [],
-    "function_breakdown": [],
-    "summary": []
+  "is_code": true,
+  "line_count": 0,
+  "function_count": 0,
+  "variable_count": 0,
+  "complexity_score": 0,
+  "conditional_statements_count": 0,
+  "suggestions_list": [
+    {
+      "message": "",
+      "severity": ""
+    }
+  ],
+  "function_breakdown": [],
+  "summary": []
 }

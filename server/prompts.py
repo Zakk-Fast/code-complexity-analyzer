@@ -1,4 +1,4 @@
-prompt = prompt = """You are a code analysis expert. Analyze the following input and return your response as valid JSON in exactly this format:
+prompt = """You are a code analysis expert. Analyze the following input and return your response as valid JSON in exactly this format:
 
 {
     "is_code": true,
@@ -7,7 +7,12 @@ prompt = prompt = """You are a code analysis expert. Analyze the following input
     "variable_count": 0,
     "complexity_score": 0,
     "conditional_statements_count": 0,
-    "suggestions_list": [],
+    "suggestions_list": [
+        {
+            "message": "Example suggestion text",
+            "severity": "warning"
+        }
+    ],
     "function_breakdown": [],
     "summary": []
 }
@@ -21,7 +26,14 @@ Instructions:
   - variable_count: Number of variables declared
   - complexity_score: Rate complexity from 1-100 (1=very simple, 100=extremely complex)
   - conditional_statements_count: Number of if/else/switch statements
-  - suggestions_list: Array of strings with specific improvement suggestions
+  - suggestions_list: ALWAYS provide 3-5 suggestions as objects with "message" and "severity" fields
+    - severity must be one of: "critical", "warning", "info", "good"
+    - "critical": Major issues that significantly impact code quality or functionality
+    - "warning": Problems that should be addressed but aren't breaking
+    - "info": General improvements or best practices
+    - "good": Positive feedback on well-written code
+    - Include at least one "good" suggestion when possible
+    - Mix actual issues with best practices
   - function_breakdown: Array of strings describing each function
   - summary: Array of strings with 2-3 sentences summarizing the code's purpose and overall quality
 

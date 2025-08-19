@@ -24,11 +24,11 @@ def analyze_code(code_block: Code_Block) -> AnalysisResult:
         data = json.loads(json_string)
         analysis_result = AnalysisResult(
             is_code=data.get("is_code", True),
-            line_count=data.get("line_count"),
-            function_count=data.get("function_count"),
-            variable_count=data.get("variable_count"),
-            complexity_score=data.get("complexity_score"),
-            conditional_statements_count=data.get("conditional_statements_count"),
+            line_count=data.get("line_count", 0),
+            function_count=data.get("function_count", 0),
+            variable_count=data.get("variable_count", 0),
+            complexity_score=data.get("complexity_score", 0),
+            conditional_statements_count=data.get("conditional_statements_count", 0),
             suggestions_list=data.get("suggestions_list", []),
             function_breakdown=data.get("function_breakdown", []),
             summary=data.get("summary", [])
