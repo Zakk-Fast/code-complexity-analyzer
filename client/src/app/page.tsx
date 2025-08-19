@@ -4,15 +4,18 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "./constants";
 import { analyzeCode, ApiError, type CodeAnalysisRequest } from "./lib/api";
+import { addToHistory, isHistoryEnabled } from "./lib/history";
 import { useToast } from "./hooks/Toast";
 import Header from "./components/ui/Header";
 import CodeAnalysisForm from "./components/CodeAnalysisForm";
 import LoadingScreen from "./components/LoadingScreen";
 import ToastContainer from "./components/ui/Toast";
+import HistorySidebar from "./components/HistorySidebar";
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const { toasts, removeToast, success, error } = useToast();
   const router = useRouter();
 
@@ -29,11 +32,11 @@ export default function HomePage() {
       localStorage.setItem("analysisResult", JSON.stringify(result));
       localStorage.setItem("analysisRequest", JSON.stringify(request));
 
-      success("Code analysis completed successfully!");
+      if (isHistoryEnabled()) {
+        addToHistory(request, result);
+      }
 
-      setTimeout(() => {
-        router.push(ROUTES.RESULTS);
-      }, 2500);
+      router.push(ROUTES.RESULTS);
     } catch (err) {
       setIsLoading(false);
       console.error("Analysis error:", err);
@@ -56,11 +59,18 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header isVisible={isVisible} />
+      <Header
+        isVisible={isVisible}
+        onHistoryClick={() => setIsHistoryOpen(true)}
+      />
       <CodeAnalysisForm
         isVisible={isVisible}
         onSubmit={handleFormSubmit}
         onError={handleFormError}
+      />
+      <HistorySidebar
+        isOpen={isHistoryOpen}
+        onClose={() => setIsHistoryOpen(false)}
       />
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
