@@ -1,28 +1,26 @@
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { LANGUAGES, ROUTES } from "../constants";
-import { analyzeCode, ApiError, type CodeAnalysisRequest } from "../lib/api";
+import { LANGUAGES } from "../constants";
+import { type CodeAnalysisRequest } from "../lib/api";
 import Tooltip from "./ui/Tooltip";
 
 interface CodeAnalysisFormProps {
   isVisible?: boolean;
+  onSubmit: (request: CodeAnalysisRequest) => Promise<void>;
 }
 
 export default function CodeAnalysisForm({
   isVisible = true,
+  onSubmit,
 }: CodeAnalysisFormProps) {
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("");
   const [filename, setFilename] = useState("");
   const [error, setError] = useState("");
 
-  const router = useRouter();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    // Basic validation
     if (!code.trim()) {
       setError("Please enter some code to analyze");
       return;
@@ -42,22 +40,16 @@ export default function CodeAnalysisForm({
       file_name: filename,
     };
 
-    try {
-      const result = await analyzeCode(request);
-
-      // Store results in localStorage for the results page
-      localStorage.setItem("analysisResult", JSON.stringify(result));
-      localStorage.setItem("analysisRequest", JSON.stringify(request));
-
-      // Navigate to results page
-      router.push(ROUTES.RESULTS);
-    } catch (err) {
-      if (err instanceof ApiError) {
-        setError(`Analysis failed: ${err.message}`);
-      } else {
+    if (typeof onSubmit === "function") {
+      try {
+        await onSubmit(request);
+      } catch (error) {
         setError("Failed to analyze code. Please try again.");
+        console.error("Form submission error:", error);
       }
-      console.error("Analysis error:", err);
+    } else {
+      console.error("onSubmit prop is not a function:", onSubmit);
+      setError("Form configuration error. Please refresh and try again.");
     }
   };
 
@@ -68,7 +60,6 @@ export default function CodeAnalysisForm({
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
       >
-        {/* Form Header */}
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-semibold text-gray-800">
             Analyze Your Code
@@ -77,16 +68,13 @@ export default function CodeAnalysisForm({
           <Tooltip content="AI-powered tool that analyzes code complexity, identifies issues, and provides improvement suggestions" />
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
             <p className="text-red-800 text-sm">{error}</p>
           </div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Code Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Code
@@ -100,9 +88,7 @@ export default function CodeAnalysisForm({
             />
           </div>
 
-          {/* Language and Filename Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Programming Language */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Programming Language
@@ -122,7 +108,6 @@ export default function CodeAnalysisForm({
               </select>
             </div>
 
-            {/* Filename */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Filename
@@ -138,10 +123,9 @@ export default function CodeAnalysisForm({
             </div>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-4 px-6 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-4 px-6 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
           >
             Analyze Code
           </button>

@@ -13,7 +13,7 @@ export default function Tooltip({ content, className = "" }: TooltipProps) {
       <button
         type="button"
         onClick={() => setShowTooltip(!showTooltip)}
-        className="w-6 h-6 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center text-gray-600 text-sm font-medium transition-colors"
+        className="w-6 h-6 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center text-gray-600 text-sm font-medium transition-colors cursor-pointer"
       >
         ?
       </button>
