@@ -2,6 +2,7 @@ prompt = """You are a code analysis expert. Analyze the following input and retu
 
 {
     "is_code": true,
+    "language": "javascript",
     "line_count": 0,
     "function_count": 0,
     "variable_count": 0,
@@ -18,8 +19,13 @@ prompt = """You are a code analysis expert. Analyze the following input and retu
 }
 
 Instructions:
-- is_code: Set to true if the input appears to be programming code, false otherwise
-- If is_code is false, set all numeric fields to 0, all arrays to empty, and summary to a brief message explaining this is not code
+- is_code: Set to true if the input contains any programming syntax, code patterns, or appears to be any form of code/markup. Be liberal in detecting code - even snippets or pseudo-code should return true.
+- language: Detect and return the programming language. You MUST use one of these exact values only:
+  javascript, typescript, python, java, csharp, cpp, c, go, rust, php, ruby, swift, kotlin, scala, r, matlab, perl, lua, dart, elixir, haskell, clojure, shell, bash, powershell, sql, html, css, json, xml, yaml, toml, markdown, unknown
+- If the detected language is not in this list, use "unknown"
+- Match the closest language from the list - do not create new language names
+- Determine language from code syntax, file extension, and content patterns
+- If is_code is false, set language to "unknown", all numeric fields to 0, all arrays to empty, and summary to a brief message explaining this is not code
 - If is_code is true, analyze normally:
   - line_count: Total lines of code (excluding empty lines and comments)
   - function_count: Number of functions/methods defined

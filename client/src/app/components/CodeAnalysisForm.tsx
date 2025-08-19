@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { LANGUAGES } from "../constants";
 import { type CodeAnalysisRequest } from "../lib/api";
 import Tooltip from "./ui/Tooltip";
 
@@ -13,7 +12,6 @@ export default function CodeAnalysisForm({
   onSubmit,
 }: CodeAnalysisFormProps) {
   const [code, setCode] = useState("");
-  const [language, setLanguage] = useState("");
   const [filename, setFilename] = useState("");
   const [error, setError] = useState("");
 
@@ -25,10 +23,6 @@ export default function CodeAnalysisForm({
       setError("Please enter some code to analyze");
       return;
     }
-    if (!language) {
-      setError("Please select a programming language");
-      return;
-    }
     if (!filename.trim()) {
       setError("Please enter a filename");
       return;
@@ -36,7 +30,7 @@ export default function CodeAnalysisForm({
 
     const request: CodeAnalysisRequest = {
       code_text: code,
-      language: language,
+      language: "auto",
       file_name: filename,
     };
 
@@ -64,7 +58,6 @@ export default function CodeAnalysisForm({
           <h2 className="text-2xl font-semibold text-gray-800">
             Analyze Your Code
           </h2>
-
           <Tooltip content="AI-powered tool that analyzes code complexity, identifies issues, and provides improvement suggestions" />
         </div>
 
@@ -77,6 +70,20 @@ export default function CodeAnalysisForm({
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filename
+            </label>
+            <input
+              type="text"
+              value={filename}
+              onChange={(e) => setFilename(e.target.value)}
+              placeholder="filename.js"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Code
             </label>
             <textarea
@@ -86,41 +93,6 @@ export default function CodeAnalysisForm({
               className="w-full h-64 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow text-gray-900"
               required
             />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Programming Language
-              </label>
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 text-lg md:text-base appearance-none"
-                required
-              >
-                <option value="">Select language</option>
-                {LANGUAGES.map((lang) => (
-                  <option key={lang.value} value={lang.value}>
-                    {lang.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Filename
-              </label>
-              <input
-                type="text"
-                value={filename}
-                onChange={(e) => setFilename(e.target.value)}
-                placeholder="filename.js"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                required
-              />
-            </div>
           </div>
 
           <button

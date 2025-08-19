@@ -11,15 +11,6 @@ export const LOADING_MESSAGES = [
   "Consulting the rubber duck...",
 ];
 
-export const LANGUAGES = [
-  { value: "javascript", label: "JavaScript" },
-  { value: "typescript", label: "TypeScript" },
-  { value: "python", label: "Python" },
-  { value: "java", label: "Java" },
-  { value: "csharp", label: "C#" },
-  { value: "unknown", label: "Unknown" },
-];
-
 export const API_BASE_URL = "http://localhost:8000";
 
 export const ROUTES = {

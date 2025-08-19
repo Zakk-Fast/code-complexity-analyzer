@@ -13,6 +13,7 @@ export interface Suggestion {
 
 export interface AnalysisResult {
   is_code: boolean;
+  language: string;
   line_count: number;
   function_count: number;
   variable_count: number;

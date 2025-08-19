@@ -1,7 +1,7 @@
 import os
 import json
 from dotenv import load_dotenv
-from models import Code_Block, AnalysisResult
+from models import Code_Block, AnalysisResult, Language
 from anthropic import Anthropic
 from prompts import prompt
 
@@ -18,12 +18,15 @@ def analyze_code(code_block: Code_Block) -> AnalysisResult:
                 {"role": "user", "content": prompt.replace("{code_here}", code_block.code_text)}
             ]
         )
+        
+        print('Sending to Claude:', repr(code_block.code_text))
         print('Claude says:', message.content[0].text)
         
         json_string = message.content[0].text
         data = json.loads(json_string)
         analysis_result = AnalysisResult(
             is_code=data.get("is_code", True),
+            language=Language(data.get("language", "unknown")),
             line_count=data.get("line_count", 0),
             function_count=data.get("function_count", 0),
             variable_count=data.get("variable_count", 0),
@@ -39,4 +42,15 @@ def analyze_code(code_block: Code_Block) -> AnalysisResult:
         return analysis_result
     except Exception as e:
         print('Error:', e)
-        return False
+        return AnalysisResult(
+        is_code=False,
+        language=Language.UNKNOWN,
+        line_count=0,
+        function_count=0,
+        variable_count=0,
+        complexity_score=0,
+        conditional_statements_count=0,
+        suggestions_list=[],
+        function_breakdown=[],
+        summary=["Error analyzing code. Please try again."]
+    )
