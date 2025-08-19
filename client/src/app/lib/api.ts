@@ -56,9 +56,9 @@ export async function analyzeCode(
       throw error;
     }
 
-    // Handle network errors, JSON parsing errors, etc.
     throw new ApiError(
-      error instanceof Error ? error.message : "Unknown error occurred"
+      error instanceof Error ? error.message : "Unknown error occurred",
+      undefined
     );
   }
 }
