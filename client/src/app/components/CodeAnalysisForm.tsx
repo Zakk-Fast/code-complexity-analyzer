@@ -5,32 +5,32 @@ import Tooltip from "./ui/Tooltip";
 interface CodeAnalysisFormProps {
   isVisible?: boolean;
   onSubmit: (request: CodeAnalysisRequest) => Promise<void>;
+  onError: (message: string) => void;
 }
 
 export default function CodeAnalysisForm({
   isVisible = true,
   onSubmit,
+  onError,
 }: CodeAnalysisFormProps) {
   const [code, setCode] = useState("");
   const [filename, setFilename] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
     if (!code.trim()) {
-      setError("Please enter some code to analyze");
+      onError("Please enter some code to analyze");
       return;
     }
     if (!filename.trim()) {
-      setError("Please enter a filename");
+      onError("Please enter a filename");
       return;
     }
 
     const request: CodeAnalysisRequest = {
       code_text: code,
-      language: "auto",
+      language: "unknown",
       file_name: filename,
     };
 
@@ -38,12 +38,12 @@ export default function CodeAnalysisForm({
       try {
         await onSubmit(request);
       } catch (error) {
-        setError("Failed to analyze code. Please try again.");
+        onError("Failed to analyze code. Please try again.");
         console.error("Form submission error:", error);
       }
     } else {
       console.error("onSubmit prop is not a function:", onSubmit);
-      setError("Form configuration error. Please refresh and try again.");
+      onError("Form configuration error. Please refresh and try again.");
     }
   };
 
@@ -61,12 +61,6 @@ export default function CodeAnalysisForm({
           <Tooltip content="AI-powered tool that analyzes code complexity, identifies issues, and provides improvement suggestions" />
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-800 text-sm">{error}</p>
-          </div>
-        )}
-
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -78,7 +72,6 @@ export default function CodeAnalysisForm({
               onChange={(e) => setFilename(e.target.value)}
               placeholder="filename.js"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-              required
             />
           </div>
 
@@ -91,7 +84,6 @@ export default function CodeAnalysisForm({
               onChange={(e) => setCode(e.target.value)}
               placeholder="Paste your code here..."
               className="w-full h-64 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow text-gray-900"
-              required
             />
           </div>
 

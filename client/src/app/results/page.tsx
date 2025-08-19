@@ -6,6 +6,8 @@ import { type AnalysisResult, type CodeAnalysisRequest } from "../lib/api";
 import { ROUTES } from "../constants";
 import ResultsHeader from "../components/results/ResultsHeader";
 import ResultsLayout from "../components/ResultsLayout";
+import ToastContainer from "../components/ui/Toast";
+import { useToast } from "../hooks/Toast";
 
 export default function ResultsPage() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
@@ -14,6 +16,7 @@ export default function ResultsPage() {
   const [originalRequest, setOriginalRequest] =
     useState<CodeAnalysisRequest | null>(null);
   const [error, setError] = useState<string>("");
+  const { toasts, removeToast, success } = useToast();
   const router = useRouter();
 
   useEffect(() => {
@@ -38,12 +41,15 @@ export default function ResultsPage() {
 
       setAnalysisResult(result);
       setOriginalRequest(request);
+
+      success("Code analysis completed successfully!");
     } catch (err) {
       console.error("Error loading analysis data:", err);
       setError("Failed to load analysis data. Please run a new analysis.");
     }
-  }, []);
+  }, [success]);
 
+  // Handle error states
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -67,6 +73,7 @@ export default function ResultsPage() {
     );
   }
 
+  // Loading state
   if (!analysisResult || !originalRequest) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -86,6 +93,7 @@ export default function ResultsPage() {
         analysisResult={analysisResult}
         originalRequest={originalRequest}
       />
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
 }
