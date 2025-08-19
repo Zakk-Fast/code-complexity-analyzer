@@ -130,13 +130,7 @@ async def analyze_code_endpoint(code_block: Code_Block) -> AnalysisResult:
 
 
 if __name__ == "__main__":
-    print('testing connection to Claude...')
-    test_block = Code_Block(
-        language=Language.JAVASCRIPT,
-        code_text=dummy_code,
-        file_name='NavigationMenu.jsx'
-    )
-    analyze_code(test_block)
-    
+    import os
+    port = int(os.environ.get("PORT", 8000))
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
