@@ -23,6 +23,7 @@ def analyze_code(code_block: Code_Block) -> AnalysisResult:
         json_string = message.content[0].text
         data = json.loads(json_string)
         analysis_result = AnalysisResult(
+            is_code=data.get("is_code", True),
             line_count=data.get("line_count"),
             function_count=data.get("function_count"),
             variable_count=data.get("variable_count"),

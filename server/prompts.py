@@ -1,6 +1,7 @@
-prompt = """You are a code analysis expert. Analyze the following code and return your response as valid JSON in exactly this format:
+prompt = prompt = """You are a code analysis expert. Analyze the following input and return your response as valid JSON in exactly this format:
 
 {
+    "is_code": true,
     "line_count": 0,
     "function_count": 0,
     "variable_count": 0,
@@ -12,16 +13,19 @@ prompt = """You are a code analysis expert. Analyze the following code and retur
 }
 
 Instructions:
-- line_count: Total lines of code (excluding empty lines and comments)
-- function_count: Number of functions/methods defined
-- variable_count: Number of variables declared
-- complexity_score: Rate complexity from 1-100 (1=very simple, 100=extremely complex)
-- conditional_statements_count: Number of if/else/switch statements
-- suggestions_list: Array of strings with specific improvement suggestions
-- function_breakdown: Array of strings describing each function (e.g., "handleSubmit: high complexity due to nested conditions")
-- summary: Array of strings with 2-3 sentences summarizing the code's purpose and overall quality
+- is_code: Set to true if the input appears to be programming code, false otherwise
+- If is_code is false, set all numeric fields to 0, all arrays to empty, and summary to a brief message explaining this is not code
+- If is_code is true, analyze normally:
+  - line_count: Total lines of code (excluding empty lines and comments)
+  - function_count: Number of functions/methods defined
+  - variable_count: Number of variables declared
+  - complexity_score: Rate complexity from 1-100 (1=very simple, 100=extremely complex)
+  - conditional_statements_count: Number of if/else/switch statements
+  - suggestions_list: Array of strings with specific improvement suggestions
+  - function_breakdown: Array of strings describing each function
+  - summary: Array of strings with 2-3 sentences summarizing the code's purpose and overall quality
 
-Code to analyze:
+Input to analyze:
 {code_here}
 
 Return ONLY the JSON response as plain text, no code blocks, no markdown formatting, no additional text."""

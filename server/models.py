@@ -16,6 +16,7 @@ class Code_Block(BaseModel):
     file_name: str
     
 class AnalysisResult(BaseModel):
+    is_code: bool
     line_count: int
     function_count: int
     variable_count: int
