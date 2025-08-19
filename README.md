@@ -2,7 +2,7 @@
 
 A full-stack code analysis application powered by Claude AI that transforms code into interactive data visualizations, providing complexity scoring, suggestions, and insights through rich charts and dashboards.
 
-
+<img width="1132" height="557" alt="Screenshot 2025-08-19 at 3 00 59 PM" src="https://github.com/user-attachments/assets/34305f6f-acde-4484-973d-40b0dea6fdde" />
 
 ## Features
 
@@ -31,6 +31,14 @@ A full-stack code analysis application powered by Claude AI that transforms code
 **Frontend:** Next.js 14, TypeScript, Tailwind CSS, Recharts  
 **Data:** localStorage with smart cleanup and privacy controls
 
+## Screenshots
+<img width="1134" height="881" alt="Screenshot 2025-08-19 at 2 59 49 PM" src="https://github.com/user-attachments/assets/efd9fc41-21fe-4dd0-a522-ba3b406ffd3d" />
+<img width="1131" height="882" alt="Screenshot 2025-08-19 at 2 59 59 PM" src="https://github.com/user-attachments/assets/866e8f84-4a6f-48e4-bd08-904daccd9499" />
+<img width="1137" height="869" alt="Screenshot 2025-08-19 at 3 00 41 PM" src="https://github.com/user-attachments/assets/8b7a7201-5009-44e4-8bf3-1c57a5ce1426" />
+<img width="1132" height="557" alt="Screenshot 2025-08-19 at 3 00 59 PM" src="https://github.com/user-attachments/assets/18a69684-b0cf-41c8-8334-7f2defe52953" />
+<img width="1125" height="517" alt="Screenshot 2025-08-19 at 3 01 06 PM" src="https://github.com/user-attachments/assets/e3cccd56-cb02-4e10-8ec0-bd62d56cf094" />
+<img width="1144" height="417" alt="Screenshot 2025-08-19 at 3 01 18 PM" src="https://github.com/user-attachments/assets/8dfc9359-2f28-4c2c-8899-a10e69303cbc" />
+
 ## Getting Started
 
 ### Prerequisites
@@ -42,11 +50,14 @@ A full-stack code analysis application powered by Claude AI that transforms code
 cd server
 pip install fastapi uvicorn anthropic python-dotenv
 echo "ANTHRO_API_KEY=your_api_key_here" > .env
-python main.py
 
 # Frontend
 cd client
-npm install && npm run dev
+npm install
+
+# Run
+cd ../
+npm run dev
 ```
 
 ## API
@@ -62,4 +73,4 @@ npm install && npm run dev
 
 ## Built With
 
-Modern full-stack development showcasing AI integration, data visualization, and professional UI/UX design.
+Modern full-stack development, AI integration, data visualization, and professional modern UI/UX design.
