@@ -1,8 +1,10 @@
 {
   "scripts": {
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:venv": "concurrently \"npm run dev:client\" \"npm run dev:server:venv\"",
     "dev:client": "cd client && npm run dev",
-    "dev:server": "cd server && python3 main.py"
+    "dev:server": "cd server && python3 main.py",
+    "dev:server:venv": "source venv/bin/activate && cd server && python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000"
   },
   "devDependencies": {
     "@types/recharts": "^1.8.29",

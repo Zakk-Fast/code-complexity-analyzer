@@ -5,12 +5,13 @@ A full-stack code analysis application powered by Claude AI that transforms code
 <img width="1132" height="557" alt="Screenshot 2025-08-19 at 3 00 59 PM" src="https://github.com/user-attachments/assets/34305f6f-acde-4484-973d-40b0dea6fdde" />
 
 ## Live Demo
-🚀 **[View Live Application](https://code-complexity-analyzer-indol.vercel.app/)**
 
+🚀 **[View Live Application](https://code-complexity-analyzer-indol.vercel.app/)**
 
 ## Features
 
 ### Interactive Data Visualization
+
 - **Complexity Gauge** - Circular progress chart with color-coded complexity scoring (1-100)
 - **Code Metrics Dashboard** - Bar charts showing functions, lines of code, and conditionals
 - **Severity-Coded Suggestions** - Color-categorized feedback cards (Critical, Warning, Info, Good)
@@ -18,12 +19,14 @@ A full-stack code analysis application powered by Claude AI that transforms code
 - **Visual History Browser** - Timeline view of past analyses with complexity indicators
 
 ### AI-Powered Analysis
+
 - **Multi-Language Support** - Auto-detects 30+ programming languages
 - **Smart Complexity Scoring** - 1-100 scale with detailed breakdown
 - **Contextual Suggestions** - Categorized feedback with severity levels
 - **Function-Level Analysis** - Individual component breakdown
 
 ### User Experience
+
 - **Modern Interface** - Clean design with smooth animations and toast notifications
 - **History Management** - Save and revisit analyses with privacy controls
 - **Mobile-Responsive** - Works seamlessly across all devices
@@ -36,6 +39,7 @@ A full-stack code analysis application powered by Claude AI that transforms code
 **Data:** localStorage with smart cleanup and privacy controls
 
 ## Screenshots
+
 <img width="1134" height="881" alt="Screenshot 2025-08-19 at 2 59 49 PM" src="https://github.com/user-attachments/assets/efd9fc41-21fe-4dd0-a522-ba3b406ffd3d" />
 <img width="1131" height="882" alt="Screenshot 2025-08-19 at 2 59 59 PM" src="https://github.com/user-attachments/assets/866e8f84-4a6f-48e4-bd08-904daccd9499" />
 <img width="1137" height="869" alt="Screenshot 2025-08-19 at 3 00 41 PM" src="https://github.com/user-attachments/assets/8b7a7201-5009-44e4-8bf3-1c57a5ce1426" />
@@ -46,20 +50,48 @@ A full-stack code analysis application powered by Claude AI that transforms code
 ## Getting Started
 
 ### Prerequisites
-- Python 3.9+, Node.js 18+, Anthropic API key
 
-### Setup
+- Python 3.9+
+- Node.js 18+
+- npm
+- Anthropic API key ([Get one here](https://console.anthropic.com/))
+
+### Quick Setup (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/Zakk-Fast/code-complexity-analyzer.git
+cd code-complexity-analyzer
+
+# Run the automated setup script
+./setup.sh
+```
+
+The setup script will:
+
+- ✅ Check all prerequisites
+- 🐍 Create and configure Python virtual environment
+- 📦 Install all Python and Node.js dependencies
+- 🔑 Prompt for your Anthropic API key
+- 🚀 Optionally start both servers automatically
+
+### Manual Setup
+
+If you prefer manual setup:
+
 ```bash
 # Backend
 cd server
-pip install fastapi uvicorn anthropic python-dotenv
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 echo "ANTHRO_API_KEY=your_api_key_here" > .env
 
 # Frontend
-cd client
+cd ../client
 npm install
 
-# Run
+# Run both servers
 cd ../
 npm run dev
 ```
@@ -67,10 +99,11 @@ npm run dev
 ## API
 
 **POST /analyze** - Returns structured analysis with complexity metrics and suggestions
+
 ```json
 {
   "code_text": "your code here",
-  "language": "unknown", 
+  "language": "unknown",
   "file_name": "example.js"
 }
 ```
