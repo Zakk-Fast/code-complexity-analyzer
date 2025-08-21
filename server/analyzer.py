@@ -27,8 +27,13 @@ def analyze_code(code_block: Code_Block) -> AnalysisResult:
         print('Sending to Claude:', repr(code_block.code_text))
         print('Claude says:', message.content[0].text)
         
-        json_string = message.content[0].text
-        data = json.loads(json_string)
+        json_string = message.content[0].text.strip()
+        
+        try:
+            data = json.loads(json_string)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Failed to parse JSON response: {e}")
+            
         analysis_result = AnalysisResult(
             is_code=data.get("is_code", True),
             language=Language(data.get("language", "unknown")),
