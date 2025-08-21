@@ -147,8 +147,12 @@ export default function HistorySidebar({
                 {history.map((item) => (
                   <div
                     key={item.id}
-                    onClick={() => handleItemClick(item)}
-                    className="p-3 border rounded-lg hover:bg-gray-50 cursor-pointer group"
+                    onClick={() => item.success ? handleItemClick(item) : undefined}
+                    className={`p-3 border rounded-lg group ${
+                      item.success
+                        ? "hover:bg-gray-50 cursor-pointer" 
+                        : "bg-red-50 border-red-200 cursor-not-allowed"
+                    }`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">
@@ -156,13 +160,19 @@ export default function HistorySidebar({
                           <h3 className="text-sm font-medium text-gray-900 truncate">
                             {item.request.file_name}
                           </h3>
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${getComplexityColor(
-                              item.result.complexity_score
-                            )}`}
-                          >
-                            {item.result.complexity_score}
-                          </span>
+                          {item.success ? (
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${getComplexityColor(
+                                item.result.complexity_score
+                              )}`}
+                            >
+                              {item.result.complexity_score}
+                            </span>
+                          ) : (
+                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                              Failed
+                            </span>
+                          )}
                         </div>
                         <div className="flex items-center space-x-2 text-xs text-gray-500">
                           <span className="capitalize">
@@ -170,6 +180,14 @@ export default function HistorySidebar({
                           </span>
                           <span>•</span>
                           <span>{formatTimestamp(item.timestamp)}</span>
+                          {item.error && (
+                            <>
+                              <span>•</span>
+                              <span className="text-red-500 truncate" title={item.error}>
+                                {item.error.length > 30 ? `${item.error.substring(0, 30)}...` : item.error}
+                              </span>
+                            </>
+                          )}
                         </div>
                       </div>
                       <button

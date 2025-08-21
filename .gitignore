@@ -1,5 +1,7 @@
 node_modules/
 
+# Python virtual environment
+venv/
 server/.venv/
 server/__pycache__/
 *.pyc
@@ -21,3 +23,4 @@ client/.env.production.local
 *.log
 .vscode/
 .idea/
+.env

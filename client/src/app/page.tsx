@@ -29,14 +29,26 @@ export default function HomePage() {
     try {
       const result = await analyzeCode(request);
 
-      localStorage.setItem("analysisResult", JSON.stringify(result));
-      localStorage.setItem("analysisRequest", JSON.stringify(request));
+      // Only save successful analyses to history
+      if (result.success) {
+        localStorage.setItem("analysisResult", JSON.stringify(result));
+        localStorage.setItem("analysisRequest", JSON.stringify(request));
 
-      if (isHistoryEnabled()) {
-        addToHistory(request, result);
+        if (isHistoryEnabled()) {
+          addToHistory(request, result);
+        }
+        
+        // Show success message
+        success("Code analysis completed successfully!");
+        
+        router.push(ROUTES.RESULTS);
+      } else {
+        // Handle analysis that returned with errors
+        setIsLoading(false);
+        error(`Analysis completed but with errors: ${result.error || 'Unknown error'}`);
+        return;
       }
 
-      router.push(ROUTES.RESULTS);
     } catch (err) {
       setIsLoading(false);
       console.error("Analysis error:", err);

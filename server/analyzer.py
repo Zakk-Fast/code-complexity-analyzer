@@ -7,7 +7,12 @@ from prompts import prompt
 
 load_dotenv()
 
-client = Anthropic(api_key=os.getenv("ANTHRO_API_KEY"))
+# Check if API key exists before creating client
+api_key = os.getenv("ANTHRO_API_KEY")
+if not api_key:
+    raise ValueError("ANTHRO_API_KEY environment variable is not set. Please check your .env file.")
+
+client = Anthropic(api_key=api_key)
 
 def analyze_code(code_block: Code_Block) -> AnalysisResult:
     try:
@@ -22,8 +27,13 @@ def analyze_code(code_block: Code_Block) -> AnalysisResult:
         print('Sending to Claude:', repr(code_block.code_text))
         print('Claude says:', message.content[0].text)
         
-        json_string = message.content[0].text
-        data = json.loads(json_string)
+        json_string = message.content[0].text.strip()
+        
+        try:
+            data = json.loads(json_string)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Failed to parse JSON response: {e}")
+            
         analysis_result = AnalysisResult(
             is_code=data.get("is_code", True),
             language=Language(data.get("language", "unknown")),
@@ -34,23 +44,45 @@ def analyze_code(code_block: Code_Block) -> AnalysisResult:
             conditional_statements_count=data.get("conditional_statements_count", 0),
             suggestions_list=data.get("suggestions_list", []),
             function_breakdown=data.get("function_breakdown", []),
-            summary=data.get("summary", [])
+            summary=data.get("summary", []),
+            success=True,
+            error=None
         )
         
         print('Analysis Result:', analysis_result)
         
         return analysis_result
+    except json.JSONDecodeError as e:
+        print('JSON parsing error:', e)
+        # Return a failed analysis result instead of raising an exception
+        return AnalysisResult(
+            is_code=False,
+            language=Language.UNKNOWN,
+            line_count=0,
+            function_count=0,
+            variable_count=0,
+            complexity_score=0,
+            conditional_statements_count=0,
+            suggestions_list=[],
+            function_breakdown=[],
+            summary=["Failed to parse analysis response from AI model"],
+            success=False,
+            error="Failed to parse analysis response from AI model"
+        )
     except Exception as e:
         print('Error:', e)
+        # Return a failed analysis result instead of raising an exception
         return AnalysisResult(
-        is_code=False,
-        language=Language.UNKNOWN,
-        line_count=0,
-        function_count=0,
-        variable_count=0,
-        complexity_score=0,
-        conditional_statements_count=0,
-        suggestions_list=[],
-        function_breakdown=[],
-        summary=["Error analyzing code. Please try again."]
-    )
+            is_code=False,
+            language=Language.UNKNOWN,
+            line_count=0,
+            function_count=0,
+            variable_count=0,
+            complexity_score=0,
+            conditional_statements_count=0,
+            suggestions_list=[],
+            function_breakdown=[],
+            summary=[f"Analysis failed: {str(e)}"],
+            success=False,
+            error=f"Analysis failed: {str(e)}"
+        )

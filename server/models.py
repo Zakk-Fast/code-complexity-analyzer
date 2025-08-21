@@ -65,3 +65,5 @@ class AnalysisResult(BaseModel):
     suggestions_list: list[Suggestion]
     function_breakdown: list[str]
     summary: list[str]
+    error: str | None = None
+    success: bool = True

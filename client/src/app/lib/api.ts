@@ -22,6 +22,8 @@ export interface AnalysisResult {
   suggestions_list: Suggestion[];
   function_breakdown: string[];
   summary: string[];
+  error?: string;
+  success: boolean;
 }
 
 export class ApiError extends Error {
