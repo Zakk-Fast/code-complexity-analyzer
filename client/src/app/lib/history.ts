@@ -5,6 +5,8 @@ export interface HistoryItem {
   timestamp: number;
   request: CodeAnalysisRequest;
   result: AnalysisResult;
+  success: boolean;
+  error?: string;
 }
 
 const HISTORY_KEY = "codeAnalysisHistory";
@@ -46,6 +48,8 @@ export function addToHistory(
       timestamp: Date.now(),
       request,
       result,
+      success: result.success,
+      error: result.error,
     };
 
     const updatedHistory = [newItem, ...history].slice(0, 50);

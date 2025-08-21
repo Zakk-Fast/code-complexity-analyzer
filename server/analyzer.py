@@ -34,23 +34,45 @@ def analyze_code(code_block: Code_Block) -> AnalysisResult:
             conditional_statements_count=data.get("conditional_statements_count", 0),
             suggestions_list=data.get("suggestions_list", []),
             function_breakdown=data.get("function_breakdown", []),
-            summary=data.get("summary", [])
+            summary=data.get("summary", []),
+            success=True,
+            error=None
         )
         
         print('Analysis Result:', analysis_result)
         
         return analysis_result
+    except json.JSONDecodeError as e:
+        print('JSON parsing error:', e)
+        # Return a failed analysis result instead of raising an exception
+        return AnalysisResult(
+            is_code=False,
+            language=Language.UNKNOWN,
+            line_count=0,
+            function_count=0,
+            variable_count=0,
+            complexity_score=0,
+            conditional_statements_count=0,
+            suggestions_list=[],
+            function_breakdown=[],
+            summary=["Failed to parse analysis response from AI model"],
+            success=False,
+            error="Failed to parse analysis response from AI model"
+        )
     except Exception as e:
         print('Error:', e)
+        # Return a failed analysis result instead of raising an exception
         return AnalysisResult(
-        is_code=False,
-        language=Language.UNKNOWN,
-        line_count=0,
-        function_count=0,
-        variable_count=0,
-        complexity_score=0,
-        conditional_statements_count=0,
-        suggestions_list=[],
-        function_breakdown=[],
-        summary=["Error analyzing code. Please try again."]
-    )
+            is_code=False,
+            language=Language.UNKNOWN,
+            line_count=0,
+            function_count=0,
+            variable_count=0,
+            complexity_score=0,
+            conditional_statements_count=0,
+            suggestions_list=[],
+            function_breakdown=[],
+            summary=[f"Analysis failed: {str(e)}"],
+            success=False,
+            error=f"Analysis failed: {str(e)}"
+        )
