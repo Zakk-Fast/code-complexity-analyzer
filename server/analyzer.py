@@ -7,7 +7,12 @@ from prompts import prompt
 
 load_dotenv()
 
-client = Anthropic(api_key=os.getenv("ANTHRO_API_KEY"))
+# Check if API key exists before creating client
+api_key = os.getenv("ANTHRO_API_KEY")
+if not api_key:
+    raise ValueError("ANTHRO_API_KEY environment variable is not set. Please check your .env file.")
+
+client = Anthropic(api_key=api_key)
 
 def analyze_code(code_block: Code_Block) -> AnalysisResult:
     try:
