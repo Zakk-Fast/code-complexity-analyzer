@@ -59,42 +59,37 @@ A full-stack code analysis application powered by Claude AI that transforms code
 ### Quick Setup (Recommended)
 
 ```bash
-# Clone the repository
-git clone https://github.com/Zakk-Fast/code-complexity-analyzer.git
+git clone https://github.com/ZakkFast/code-complexity-analyzer.git
 cd code-complexity-analyzer
-
-# Run the automated setup script
+chmod +x setup.sh
 ./setup.sh
 ```
 
 The setup script will:
 
-- ✅ Check all prerequisites
-- 🐍 Create and configure Python virtual environment
-- 📦 Install all Python and Node.js dependencies
-- 🔑 Prompt for your Anthropic API key
-- 🚀 Optionally start both servers automatically
+- Check all prerequisites
+- Create and configure a Python virtual environment
+- Install root and frontend Node.js dependencies
+- Install Python dependencies
+- Prompt for your Anthropic API key if you choose to launch immediately
+- Optionally start both servers
 
 ### Manual Setup
 
-If you prefer manual setup:
+From the repository root:
 
 ```bash
-# Backend
-cd server
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
-echo "ANTHRO_API_KEY=your_api_key_here" > .env
-
-# Frontend
-cd ../client
 npm install
-
-# Run both servers
-cd ../
-npm run dev
+cd client && npm install && cd ..
+echo "ANTHRO_API_KEY=your_api_key_here" > server/.env
+npm run dev:venv
 ```
+
+Frontend: `http://localhost:3000`  
+Backend: `http://localhost:8000`
 
 ## API
 
